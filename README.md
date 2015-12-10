@@ -36,17 +36,18 @@ En cours...
 
 ### Solution basique
 
-Dans cette solution les serveurs esclaves sont uniquement utilisé
-quand le maitre est mort. Quand le maitre est en vie il tourne a vide
-et ne servent a rien. Les serveurs esclaves forment une chaine (dans
-la définition et l'ordre apparait dans la zone DNS du nom de domaine).
+Dans cette solution les serveurs esclaves sont uniquement utilisés
+quand le maitre est mort. Quand le maitre est en vie, les esclaves
+tournent à vide et ne servent a rien. Les serveurs esclaves forment
+une chaine (dont la définition et l'ordre apparait dans la zone DNS du
+nom de domaine).
 
 Les clients XMPP sont censés respecter cette zone DNS et vont se
 connecter au serveur suivant de la chaine si le serveur initial essayé
 est mort.
 
-Le serveur maitre dump sa db dans un fichier *texte* (plus facilement
-importable que le backup binaire) via :
+Le serveur maitre dump régulièrement sa db dans un fichier *texte*
+(plus facilement importable que le backup binaire) via un crontab :
 
     ejabberdctl dump backup-ejabberd-db
 
