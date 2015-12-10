@@ -1,0 +1,29 @@
+
+set jid = admin@localhost
+set password = admin
+set server = localhost
+
+# ignore cert errors...
+set ssl_ignore_checks = 1
+set tls = 1
+
+set cmdhistory_lines = 250
+set escdelay = 50
+set ignore_self_presence = 1
+set max_history_blocks = 8
+set message_autoaway = Auto-away (idle)
+
+# /alias commands
+alias away     = status away
+alias dnd      = status dnd
+alias me = say /me
+alias notavail = status notavail
+alias online   = status online
+
+# keys
+bind 17 = roster unread_next
+bind 24 = roster alternate
+bind 269 = roster toggle_offline
+bind 276 = roster toggle
+bind 514 = buffer down
+bind 521 = buffer up
