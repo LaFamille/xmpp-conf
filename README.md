@@ -32,7 +32,44 @@ symboliques.
 
 ## Synchronisation avec le serveur "maitre"
 
-En cours.
+En cours...
+
+### Solution basique
+
+Dans cette solution les serveurs esclaves sont uniquement utilisé
+quand le maitre est mort. Quand le maitre est en vie il tourne a vide
+et ne servent a rien. Les serveurs esclaves forment une chaine (dans
+la définition et l'ordre apparait dans la zone DNS du nom de domaine).
+
+Les clients XMPP sont censés respecter cette zone DNS et vont se
+connecter au serveur suivant de la chaine si le serveur initial essayé
+est mort.
+
+Le serveur maitre dump sa db dans un fichier *texte* (plus facilement
+importable que le backup binaire) via :
+
+    ejabberdctl dump backup-ejabberd-db
+
+Ce fichier est généré dans /var/lib/ejabberd/. On pourrait l'exposer
+via le serveur web avec un access restreint (`.htaccess`).
+
+    mv /var/lib/ejabberd/backup-ejabberd-db /var/www/html/
+
+Les serveurs de backup de la chaine peuvent avoir un crontab qui
+récupère et ré-importe cette db tous les jours à genre 4h du mat.
+
+    curl -u username:password http://babare.dynamic-dns.net/backup-ejabberd-db \
+         > /var/lib/ejabberd/backup-ejabberd-db
+    ejabberdctl load backup-ejabberd-db
+    # eventuellement un restart de ejabberd ici, a tester.
+
+Le problème de cette solution c'est que chaque serveur est
+indépendant. Quand le maitre se remet a marcher les clients n'ont
+aucune raison de fermer la connexion qu'ils utilisent. On peut se
+trouver avec des utilisateurs sur plusieurs serveurs sans qu'aucun
+état/communication ne soit partagés (les users appairaitrons en ligne
+sur qu'un seul serveur à la fois). Bref bordel. A creuser.
+
 
 ## Certificat
 
