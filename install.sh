@@ -36,8 +36,8 @@ if pkg_exists libapache2-mod-proxy-html; then
     apt-get install libapache2-mod-proxy-html
 fi
 
-msg "installing /etc/ejabberd.yml"
-cpbak ejabberd/ejabberd.yml /etc/ejabberd.yml
+msg "installing /etc/ejabberd/ejabberd.yml"
+cpbak ejabberd/ejabberd.yml /etc/ejabberd/ejabberd.yml
 
 ejabberdctl restart
 
