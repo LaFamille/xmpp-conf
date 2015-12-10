@@ -16,13 +16,25 @@ cpbak() {
     cp --backup=simple --suffix=.bak $@
 }
 
+pkg_exists() {
+    if apt-cache show "$1" &> /dev/null; then
+	return 0
+    else
+	return 1
+    fi
+}
+
 if [ "$EUID" -ne 0 ]; then
     die "run as root please"
 fi
 
 msg "packages installation"
 apt-get update
-apt-get install ejabberd apache2 libapache2-mod-proxy-html iptables-persistent
+apt-get install ejabberd apache2 iptables-persistent
+
+if pkg_exists libapache2-mod-proxy-html; then
+    apt-get install libapache2-mod-proxy-html
+fi
 
 msg "installing /etc/ejabberd.yml"
 cpbak ejabberd/ejabberd.yml /etc/ejabberd.yml
