@@ -15,7 +15,7 @@ remove_backup_cron() {
 }
 
 add_backup_cron() {
-    ( (contab -l || true) ; echo "$@" "##cron-setup generated, leave this!" ) | crontab -
+    ( (crontab -l || true) ; echo "$@" "##cron-setup generated, leave this!" ) | crontab -
 }
 
 if [ $# -lt 2 ]; then
