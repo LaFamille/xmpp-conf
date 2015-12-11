@@ -82,7 +82,7 @@ if [ -e /var/www/html ]; then
     if [ -e /var/www/html/chat/ ] && yn "remove old web root that looks like previous setup?"; then
 	rm -rf /var/www/html
     else
-	local newr="/var/www/html.bak.$(date +%Y-%m-%d-%H:%M:%S)"
+	newr="/var/www/html.bak.$(date +%Y-%m-%d-%H:%M:%S)"
 	mv /var/www/html "$newr"
 	msg "backup web old web root to $newr"
     fi
