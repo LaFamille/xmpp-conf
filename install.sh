@@ -17,10 +17,10 @@ else
     die "Usage: $0 [master|slave]"
 fi
 
-if ! which ssh; then
+if ! which sshd; then
     msg "inital packages installation"
     apt-get update
-    apt-get install ssh rsync
+    apt-get install openssh-server rsync
 fi
 
 if ! $is_master_node; then
