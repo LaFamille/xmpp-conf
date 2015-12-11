@@ -59,10 +59,10 @@ rm_old_files() {
 }
 
 # place where ejabberctl looks for
-ejabberd_dir=/var/ejabberd
+ejabberd_dir=/var/lib/ejabberd
 
 # place to store master backups
-backup_dir=/var/ejabberd/backup
+backup_dir=/var/lib/ejabberd/backup
 
 # nb of backup file to keep
 backup_keep_last=5
