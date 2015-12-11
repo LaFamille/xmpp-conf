@@ -11,14 +11,14 @@ usage() {
 }
 
 remove_backup_cron() {
-    ( crontab -l | grep -v '##cron-setup' ) | crontab -
+    ( (crontab -l || true) | grep -v '##cron-setup' ) | crontab -
 }
 
 add_backup_cron() {
-    ( contab -l ; echo "$@" "##cron-setup generated, leave this!" ) | crontab -
+    ( (contab -l || true) ; echo "$@" "##cron-setup generated, leave this!" ) | crontab -
 }
 
-if [ $# -le 2 ]; then
+if [ $# -lt 2 ]; then
     usage
 fi
 
@@ -50,4 +50,4 @@ if [ $mode = "master" -a $op = "install" ]; then
 if [ $mode = "slave" -a $op = "install" ]; then
     add_backup_cron "30 4 * * * cd $script_dir ; ./import-db.sh"
 fi
-q
+
