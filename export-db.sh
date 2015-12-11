@@ -14,4 +14,3 @@ ln -rs $backup_dir/$full $backup_dir/$backup_base-new
 mv $backup_dir/$backup_base-new $backup_dir/$backup_base
 
 rm_old_files $backup_keep_last $backup_dir/$backup_base.*
-

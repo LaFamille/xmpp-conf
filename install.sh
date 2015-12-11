@@ -33,9 +33,8 @@ if ! $is_master_node; then
     msg "authorized keys (~$master_user/.ssh/autorized_keys)"
     msg "echo '"$(cat ~/.ssh/id_rsa.pub)"' >> ~$master_user/.ssh/authorized_keys"
 
-
     while true; do
-	msg "testing master access (should ..."
+	msg "testing master access..."
 	if ! ssh $master_user@$master_host true; then
 	    msg "press return to try again..."
 	    read line
@@ -90,6 +89,7 @@ if $is_master_node; then
     useradd -m -g ejabberd $master_user
     sudo -u $master_user 'mkdir -p ~/.ssh ; chmod 0700 ~/.ssh ; touch authorized_keys ; chmod 0600 authorized_keys'
     chmod -R g+rwx $ejabberd_dir
+    msg "all done!"
+else
+    msg "almost done! add this host the the DNS zone file, see http://wiki.xmpp.org/web/SRV_Records#Example_3"
 fi
-
-msg "all done!"
