@@ -38,6 +38,12 @@ yn() {
     done
 }
 
+user_exists() {
+    if id -u "$1" &>/dev/null; then
+	return 0;
+    fi
+    return 1
+}
 
 backup_base=ejabberd-backup
 backup_date_format="+%Y-%m-%d" # max 1 backup per day

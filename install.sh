@@ -95,7 +95,9 @@ iptables-save > /etc/iptables/rules.v4
 
 if $is_master_node; then
     msg "creating backup user (used by slaves)"
-    useradd -m -g ejabberd $master_user
+    if ! user_exists $master_user; then
+	useradd -m -g ejabberd $master_user
+    fi
     sudo -u $master_user 'mkdir -p ~/.ssh ; chmod 0700 ~/.ssh ; touch authorized_keys ; chmod 0600 authorized_keys'
     chmod -R g+rwx $ejabberd_dir
     msg "all done!"
