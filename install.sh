@@ -20,7 +20,12 @@ fi
 if ! which sshd; then
     msg "inital packages installation"
     apt-get update
-    apt-get install openssh-server rsync
+    apt-get install openssh-server
+fi
+
+if ! which sudo; then
+    msg "installing sudo"
+    apt-get install sudo
 fi
 
 if ! $is_master_node; then
