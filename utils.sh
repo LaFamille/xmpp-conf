@@ -49,5 +49,5 @@ backup_dir=/var/ejabberd/backup
 # nb of backup file to keep
 backup_keep_last=5
 
-master_user=backup
+master_user=xmppbackup
 master_host=babare.dynamic-dns.net
