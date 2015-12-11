@@ -31,7 +31,7 @@ fi
 if ! $is_master_node; then
     if ! stat ~/.ssh/id_rsa.pub &> /dev/null; then
 	msg "couldnt find an existing ssh key; generating one"
-	ssh-keygen -N ''
+	ssh-keygen -N '' -f ~/.ssh/id_rsa
     fi
 
     if grep -qi encrypted ~/.ssh/id_rsa; then
