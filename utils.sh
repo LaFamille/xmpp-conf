@@ -58,14 +58,15 @@ rm_old_files() {
     ls -t "$@" | sed 1,${n}d | xargs rm -f
 }
 
+master_user=xmppbackup
+master_host=babare.dynamic-dns.net
+
 # place where ejabberctl looks for
 ejabberd_dir=/var/lib/ejabberd
 
 # place to store master backups
-backup_dir=/var/lib/ejabberd/backup
+backup_dir="/home/$master_user/backup"
 
 # nb of backup file to keep
 backup_keep_last=5
 
-master_user=xmppbackup
-master_host=babare.dynamic-dns.net

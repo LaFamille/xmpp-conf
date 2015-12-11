@@ -103,7 +103,8 @@ if $is_master_node; then
 	useradd -m -g ejabberd $master_user
     fi
     sudo -u $master_user bash -c 'mkdir -p ~/.ssh ; chmod 0700 ~/.ssh ; cd ~/.ssh ; touch authorized_keys ; chmod 0600 authorized_keys'
-    chmod -R g+rwx $ejabberd_dir
+    mkdir -p $backup_dir
+    chmod -R g+rwx $backup_dir
     msg "all done!"
 else
     msg "almost done! add this host the the DNS zone file, see http://wiki.xmpp.org/web/SRV_Records#Example_3"
