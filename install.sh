@@ -44,12 +44,9 @@ if ! $is_master_node; then
 	    msg "press return to try again..."
 	    read line
 	else
-	    read -p "was something asked to you?" yn
-	    case $yn in
-		[Yy]* ) true;;
-		[Nn]* ) break;;
-		* ) echo "Please answer yes or no.";;
-	    esac
+	    if ! yn "something asked to you?"; then
+		break
+	    fi
 	fi
     done
     msg "yay, ssh access seems to work"
@@ -82,7 +79,13 @@ service apache2 restart
 msg "installing website content"
 # backup any existing web dir
 if [ -e /var/www/html ]; then
-    mv /var/www/html{,.bak}
+    if [ -e /var/www/html/chat/ ] && yn "remove old web root that looks like previous setup?"; then
+	rm -rf /var/www/html
+    else
+	local newr="/var/www/html.bak.$(date +%Y-%m-%d-%H:%M:%S)"
+	mv /var/www/html "$newr"
+	msg "backup web old web root to $newr"
+    fi
 fi
 cp -R apache/webroot /var/www/html
 

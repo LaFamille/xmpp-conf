@@ -27,6 +27,18 @@ check_if_root() {
     fi
 }
 
+yn() {
+    while true; do
+	read -p "$*" yn
+	case $yn in
+	    [Yy]* ) return 0;;
+	    [Nn]* ) return 1;;
+	    * ) echo "please answer yes or no.";;
+	esac
+    done
+}
+
+
 backup_base=ejabberd-backup
 backup_date_format="+%Y-%m-%d" # max 1 backup per day
 
