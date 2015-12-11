@@ -45,6 +45,7 @@ if ! $is_master_node; then
 		[Nn]* ) break;;
 		* ) echo "Please answer yes or no.";;
 	    esac
+	fi
     done
     msg "yay, ssh access seems to work"
 fi
