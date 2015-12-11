@@ -3,33 +3,54 @@
 # exit on errors
 set -e
 
-die() {
-    echo -e "\033[1;31m[ERR] \033[0m\033[1m$*\033[0m"
-    exit 1
-}
+source ./utils.sh
 
-msg() {
-    echo -e "\033[1;32m[*] \033[0m\033[1m$*\033[0m"
-}
+check_if_root
 
-cpbak() {
-    cp --backup=simple --suffix=.bak $@
-}
+is_master_node=
 
-pkg_exists() {
-    if apt-cache show "$1" &> /dev/null; then
-	return 0
-    else
-	return 1
-    fi
-}
-
-if [ "$EUID" -ne 0 ]; then
-    die "run as root please"
+if [ "$1" = "master" ]; then
+    is_master_node=true
+elif [ "$1" = "slave" ]; then
+    is_master_node=false
+else
+    die "Usage: $0 [master|slave]"
 fi
 
-msg "packages installation"
-apt-get update
+if ! which ssh; then
+    msg "inital packages installation"
+    apt-get update
+    apt-get install ssh rsync
+fi
+
+if ! $is_master_node; then
+    if ! stat ~/.ssh/id_rsa.pub &> /dev/null; then
+	msg "couldnt find an existing ssh key; generating one"
+	ssh-keygen
+    fi
+
+    msg "ask for your public key (~$USER/.ssh/id_rsa.pub) to be added to the master user"
+    msg "authorized keys (~$master_user/.ssh/autorized_keys)"
+    msg "echo '"$(cat ~/.ssh/id_rsa.pub)"' >> ~$master_user/.ssh/authorized_keys"
+
+
+    while true; do
+	msg "testing master access (should ..."
+	if ! ssh $master_user@$master_host true; then
+	    msg "press return to try again..."
+	    read line
+	else
+	    read -p "was something asked to you?" yn
+	    case $yn in
+		[Yy]* ) true;;
+		[Nn]* ) break;;
+		* ) echo "Please answer yes or no.";;
+	    esac
+    done
+    msg "yay, ssh access seems to work"
+fi
+
+msg "package installation"
 apt-get install ejabberd apache2 iptables-persistent
 
 if pkg_exists libapache2-mod-proxy-html; then
@@ -63,5 +84,12 @@ cp -R apache/webroot /var/www/html
 msg "redirecting port 110 to xmpp server port 5222"
 iptables -t nat -A PREROUTING -p tcp --dport 110 -j REDIRECT --to-port 5222
 iptables-save > /etc/iptables/rules.v4
+
+if $is_master_node; then
+    msg "creating backup user (used by slaves)"
+    useradd -m -g ejabberd $master_user
+    sudo -u $master_user 'mkdir -p ~/.ssh ; chmod 0700 ~/.ssh ; touch authorized_keys ; chmod 0600 authorized_keys'
+    chmod -R g+rwx $ejabberd_dir
+fi
 
 msg "all done!"
