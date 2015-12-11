@@ -45,6 +45,7 @@ remove_backup_cron
 # master backup at 4am
 if [ $mode = "master" -a $op = "install" ]; then
     add_backup_cron "0 4 * * * cd $script_dir ; ./export-db.sh"
+fi
 
 # slave import at 4:30am
 if [ $mode = "slave" -a $op = "install" ]; then
