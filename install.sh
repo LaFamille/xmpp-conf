@@ -31,7 +31,11 @@ fi
 if ! $is_master_node; then
     if ! stat ~/.ssh/id_rsa.pub &> /dev/null; then
 	msg "couldnt find an existing ssh key; generating one"
-	ssh-keygen
+	ssh-keygen -N ''
+    fi
+
+    if grep -qi encrypted ~/.ssh/id_rsa; then
+	die "your private key is encrypted, please remove the passphrase"
     fi
 
     msg "ask for your public key (~$USER/.ssh/id_rsa.pub) to be added to the master user"
